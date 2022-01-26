@@ -4,7 +4,7 @@ local localPlayer = game:GetService("Players").LocalPlayer
 local mouse = localPlayer:GetMouse()
 local camera = game.Workspace.CurrentCamera
 local team = true
-local lock = MouseButton.RIGHT
+local lock = MouseButton.MIDDLE
 
 local function closestplayer()
     local target = nil
