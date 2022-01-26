@@ -7,7 +7,7 @@ local team = true
 
 local function closestplayer()
     local target = nil
-    local dist = nil
+    local dist = math.huge
 for i,v in pairs(game:GetService("Players"):GetPlayers()) do
     if v.Name ~= localPlayer.Name then
         if v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health ~= 0 and v.Character:FindFirstChild("HumanoidRootPart") and team and v.TeamColor ~= localPlayer.TeamColor then
@@ -46,7 +46,7 @@ end)
 
 UIS.InputBegan:Connect(function(inp)
     if inp.UserInputType == Enum.UserInputType.MouseButton2 then
-        aim = true
+        aim = false
     end
 end)
 
