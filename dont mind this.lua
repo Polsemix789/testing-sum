@@ -4,6 +4,7 @@ local localPlayer = game:GetService("Players").LocalPlayer
 local mouse = localPlayer:GetMouse()
 local camera = game.Workspace.CurrentCamera
 local team = true
+local lock = MouseButton.RIGHT
 
 local function closestplayer()
     local target = nil
@@ -36,22 +37,22 @@ end
 
 local camera = game.Workspace.CurrentCamera
 local UIS = game:GetService("UserInputService")
-local aim = false
+local lock = false
 
 game:GetService("RunService").RenderStepped:Connect(function()
-    if aim then
+    if lock then
         camera.CFrame = CFrame.new(camera.CFrame.Position,closestplayer().Character.Head.Position)
     end
 end)
 
 UIS.InputBegan:Connect(function(inp)
     if inp.UserInputType == Enum.UserInputType.MouseButton2 then
-        aim = false
+        lock = false
     end
 end)
 
 UIS.InputEnded:Connect(function(inp)
     if inp.UserInputType == Enum.UserInputType.MouseButton2 then
-        aim = false
+        lock = false
     end
 end)
