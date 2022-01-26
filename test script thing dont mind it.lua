@@ -1,3 +1,5 @@
+-- credit 2 irc7 on yt
+
 local localPlayer = game:GetService("Players").LocalPlayer
 local mouse = localPlayer:GetMouse()
 local camera = game.Workspace.CurrentCamera
@@ -5,7 +7,7 @@ local team = true
 
 local function closestplayer()
     local target = nil
-    local dist = nil
+    local dist = math.huge
 for i,v in pairs(game:GetService("Players"):GetPlayers()) do
     if v.Name ~= localPlayer.Name then
         if v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health ~= 0 and v.Character:FindFirstChild("HumanoidRootPart") and team and v.TeamColor ~= localPlayer.TeamColor then
