@@ -1,4 +1,4 @@
-	local script = Player:NewToggle('LocalScript', function(state)
+	local script = Player:NewToggle(function(state)
 
 	_G.aimbot = false
 	local camera = game.Workspace.CurrentCamera
