@@ -1,3 +1,5 @@
+	local script = Player:NewToggle('LocalScript', function(state)
+
 	_G.aimbot = false
 	local camera = game.Workspace.CurrentCamera
 	local localplayer = game:GetService("Players").LocalPlayer
@@ -25,7 +27,6 @@
 			
 		else
 			_G.aimbot = false
-            return
 		end
 	end)
 	
