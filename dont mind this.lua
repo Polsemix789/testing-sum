@@ -1,58 +1,56 @@
--- credit 2 irc7 on yt
+getgenv().Settings = {
+   Enabled = true,
+}
 
-local localPlayer = game:GetService("Players").LocalPlayer
-local mouse = localPlayer:GetMouse()
-local camera = game.Workspace.CurrentCamera
-local team = true
-local lock = MouseButton.MIDDLE
 
-local function closestplayer()
-    local target = nil
-    local dist = math.huge
-for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-    if v.Name ~= localPlayer.Name then
-        if v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health ~= 0 and v.Character:FindFirstChild("HumanoidRootPart") and team and v.TeamColor ~= localPlayer.TeamColor then
-            local magnitude = camera:WorldToScreenPoint(v.Character.HumanoidRootPart.Position)
-            local check = (Vector2.new(mouse.X,mouse.Y)-Vector2.new(magnitude.X,magnitude.Y)).magnitude
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local Camera = game.Workspace.CurrentCamera
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 
-            if check < dist then
-                target  = v
-                dist = check
-            end
-        elseif v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health ~= 0 and v.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Head") and team == false then
-            local magnitude = camera:WorldToScreenPoint(v.Character.HumanoidRootPart.Position)
-            local check = (Vector2.new(mouse.X,mouse.Y)-Vector2.new(magnitude.X,magnitude.Y)).magnitude
 
-            if check < dist then
-                target  = v
-                dist = check
-            end
-        end
-    end
-end
 
-return target 
+function IsAlive()
+   if Players.LocalPlayer.PlayerGui:FindFirstChild("MainGui") then
+       return true
+   end
+   return false
 end
 
 
-local camera = game.Workspace.CurrentCamera
-local UIS = game:GetService("UserInputService")
-local lock = false
+function Closest()
+   local Distance = math.huge
+   local Closest
+   if IsAlive() then
+       for i,v in pairs(Players:GetPlayers()) do
+           if v ~= LocalPlayer then
+               if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                   local Pos, OnScreen = Camera:WorldToScreenPoint(v.Character.Head.Position)
+                   local RealMouse = UserInputService:GetMouseLocation()
+                   local Dist = (Vector2.new(Pos.X, Pos.Y) - Vector2.new(RealMouse.X, RealMouse.Y)).Magnitude
+                   if Dist < Distance then
+                       Distance = Dist
+                       Closest = v
+                   end
+               end
+           end
+       end
+   end
+   return Closest
+end
 
-game:GetService("RunService").RenderStepped:Connect(function()
-    if lock then
-        camera.CFrame = CFrame.new(camera.CFrame.Position,closestplayer().Character.Head.Position)
-    end
-end)
-
-UIS.InputBegan:Connect(function(inp)
-    if inp.UserInputType == Enum.UserInputType.MouseButton2 then
-        lock = false
-    end
-end)
-
-UIS.InputEnded:Connect(function(inp)
-    if inp.UserInputType == Enum.UserInputType.MouseButton2 then
-        lock = false
-    end
+LocalPlayer.PlayerGui.ChildAdded:Connect(function(child)
+   if child.Name == "MainGui" then
+       local Module = require(child:FindFirstChild("NewLocal").Tools.Tool.Gun)
+       local Old = Module.ConeOfFire
+       Module.ConeOfFire = function(...)
+           local closest = Closest()
+           if closest ~= nil and Settings.Enabled then
+               return closest.Character.HumanoidRootPart.CFrame.p
+           end
+           return Old(...)
+       end
+   end
 end)
